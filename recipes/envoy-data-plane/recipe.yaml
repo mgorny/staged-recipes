@@ -1,0 +1,53 @@
+schema_version: 1
+
+context:
+  version: "2.2.0"
+
+package:
+  name: envoy-data-plane
+  version: ${{ version }}
+
+source:
+  url: https://files.pythonhosted.org/packages/source/e/envoy-data-plane/envoy_data_plane-${{ version }}.tar.gz
+  sha256: 79d6aecab054eecd79d5fa64bf6c775bf7f56ba7cb0b9cf9b34bf8f4c55b79e1
+
+build:
+  number: 0
+  noarch: python
+  script:
+    # remove betterproto2 pin, we don't have version that old
+    - sed -i -e '/betterproto2/s:,<[0-9.]*::' pyproject.toml
+    - ${{ PYTHON }} -m pip install . -vv
+
+requirements:
+  host:
+    - python ${{ python_min }}.*
+    - hatchling
+    - hatch-build-scripts
+    - betterproto2-compiler
+    - grpcio-tools >=1.75.1
+    - requests
+    - structlog
+    - pip
+  run:
+    - python >=${{ python_min }}
+    #- betterproto2
+
+tests:
+  - python:
+      imports:
+        - envoy_data_plane
+      pip_check: true
+      python_version:
+        - ${{ python_min }}.*
+        - "*"
+
+about:
+  summary: Python dataclasses for the Envoy Data-Plane-API
+  license: MIT
+  license_file: LICENSE
+  homepage: https://pypi.org/project/envoy_data_plane/
+
+extra:
+  recipe-maintainers:
+    - mgorny
