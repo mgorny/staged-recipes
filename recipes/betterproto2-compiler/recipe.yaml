@@ -35,6 +35,8 @@ requirements:
     - ruff >=0.9.3
     - jinja2 >=3.0.3
     - typing_extensions >=4.7.1,<5
+  run_exports:
+    - betterproto2 >=0.10.0,<0.11.dev0
 
 tests:
   - python:
